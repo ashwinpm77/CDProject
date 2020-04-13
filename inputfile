@@ -1,0 +1,8 @@
+int main()
+begin
+float a,b,c,_hello;
+begin
+_hello = (a+b)*(c+d)+100/12.5%700;
+print(_hello)
+end
+end

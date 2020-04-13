@@ -1,4 +1,6 @@
-# Compiler Designed for the following syntax
+#!/usr/bin/python3
+
+# Compiler Designed for the following syntax by Ashwin P M and Basanagouda V Patil
 
 """
 int main()
@@ -12,7 +14,7 @@ end
 
 """
 
-from basya_consts import Consts
+from compiler_consts import Consts
 import sys
 
 # Tokenizer... This function converts the program string to token string
@@ -23,10 +25,10 @@ def tokenizer(program_string):
     token_string = ""
     while program_string[ip] != '$':
         current_token = ""
-        if program_string[ip].isalpha():
+        if program_string[ip].isalpha() or program_string[ip] == '_':
             current_token += program_string[ip]
             ip += 1
-            while program_string[ip].isalnum():
+            while program_string[ip].isalnum() or program_string[ip] == '_':
                 current_token += program_string[ip]
                 ip += 1
             if current_token in tokens.keys():
@@ -115,7 +117,7 @@ def syntax_analyser(token_string, new_line):
 # Main function
 def main():
     if len(sys.argv) < 2:
-        print("Compiler: No input file mentioned...\nUse Syntax basya++ <filename>")
+        print("Compiler: No input file mentioned...\nUse Syntax ./compiler <filename> or python3 compiler <filename>")
         exit()
     filename = sys.argv[1]
     file = open(filename, "r")
@@ -126,6 +128,7 @@ def main():
     # Tokenizing
     token_string = tokenizer(program_string)
     print(token_string)
+    print("(Mapping of tokens can be found in compiler_consts.py file)")
     print("\n\n")
     # Parsing
     syntax_analyser(token_string, Consts.tokens['\n'])

@@ -1,8 +1,0 @@
-int main()
-begin
-float a,b,c;
-begin
-a = (a+b)*(c+d)+100/12.5%700;
-print(a)
-endl
-end
