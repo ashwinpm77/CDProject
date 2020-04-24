@@ -17,10 +17,17 @@ end
 from compiler_consts import Consts
 import sys
 
+new_lines = []
+
 # Tokenizer... This function converts the program string to token string
 def tokenizer(program_string):
     tokens = Consts.tokens
     ip = 0
+    ind = -1
+    while program_string[ind] == '\n' or program_string[ind] == '\r' or program_string[ind] == ' ':
+        ind -= 1
+    if ind < -1:
+        program_string = program_string[:ind+1]
     program_string += '$'
     token_string = ""
     while program_string[ip] != '$':
@@ -42,6 +49,22 @@ def tokenizer(program_string):
                 current_token += program_string[ip]
                 ip += 1
             token_string += tokens['num']
+        elif program_string[ip] == ' ' or program_string[ip] == '\t':
+            ip += 1
+            while program_string[ip] == ' ' or program_string[ip] == '\t':
+                ip += 1
+            token_string += tokens[' ']
+        elif program_string[ip] == '\n' or program_string[ip] == '\r':
+            nl_counts = 0
+            if program_string[ip] == '\n':
+                nl_counts += 1
+            ip += 1
+            while program_string[ip] == '\n' or program_string[ip] == '\r' or program_string[ip] == ' ' or program_string[ip] == '\t':
+                if program_string[ip] == '\n':
+                    nl_counts += 1
+                ip += 1
+            new_lines.append(nl_counts)
+            token_string += tokens['\n']
         else:
             if program_string[ip] in tokens:
                 token_string += tokens[program_string[ip]]
@@ -81,6 +104,7 @@ def syntax_analyser(token_string, new_line):
     ip = 0
     while True:
         # print("token -> ", token_string[ip], "-> ", end="")
+        # print(token_string[ip])
         # print(stack)
         pivot = parse_table[stack[-1]][token_string[ip]]
         
@@ -109,7 +133,11 @@ def syntax_analyser(token_string, new_line):
     for _ in range(ip):
         if token_string[_] == new_line:
             line_count += 1
-    print("Parser: Error in line " + str(line_count))
+    new_line_count = sum(new_lines[:line_count-1])+1
+    # if line_count > len(new_lines):
+    #     new_line_count += 1
+    print("Parser: Error in line " + str(new_line_count))
+    print(line_count)
 
 # print(tokenizer("int main()12abc#"))
 # syntax_analyser("", 'c')
