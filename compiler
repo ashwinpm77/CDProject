@@ -29,7 +29,7 @@ def tokenizer(program_string):
     if ind < -1:
         program_string = program_string[:ind+1]
     program_string += '$'
-    token_string = ""
+    token_string = []
     while program_string[ip] != '$':
         current_token = ""
         if program_string[ip].isalpha() or program_string[ip] == '_':
@@ -39,21 +39,21 @@ def tokenizer(program_string):
                 current_token += program_string[ip]
                 ip += 1
             if current_token in tokens.keys():
-                token_string += tokens[current_token]
+                token_string.append(tokens[current_token])
             else:
-                token_string += tokens['var']
+                token_string.append(tokens['var'])
         elif program_string[ip].isnumeric():
             current_token += program_string[ip]
             ip += 1
             while program_string[ip].isnumeric() or program_string[ip] == '.':
                 current_token += program_string[ip]
                 ip += 1
-            token_string += tokens['num']
+            token_string.append(tokens['num'])
         elif program_string[ip] == ' ' or program_string[ip] == '\t':
             ip += 1
             while program_string[ip] == ' ' or program_string[ip] == '\t':
                 ip += 1
-            token_string += tokens[' ']
+            token_string.append(tokens[' '])
         elif program_string[ip] == '\n' or program_string[ip] == '\r':
             nl_counts = 0
             if program_string[ip] == '\n':
@@ -64,10 +64,10 @@ def tokenizer(program_string):
                     nl_counts += 1
                 ip += 1
             new_lines.append(nl_counts)
-            token_string += tokens['\n']
+            token_string.append(tokens['\n'])
         else:
             if program_string[ip] in tokens:
-                token_string += tokens[program_string[ip]]
+                token_string.append(tokens[program_string[ip]])
                 ip += 1
             else:
                 nl_count = 1
@@ -93,7 +93,7 @@ def syntax_analyser(token_string, new_line):
     # Parse Table
     parse_table = Consts.parse_table
 
-    token_string += "$"
+    token_string.append("$")
     
     # Stack that is used for parsing
 
