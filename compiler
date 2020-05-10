@@ -137,7 +137,6 @@ def syntax_analyser(token_string, new_line):
     # if line_count > len(new_lines):
     #     new_line_count += 1
     print("Parser: Error in line " + str(new_line_count))
-    print(line_count)
 
 # print(tokenizer("int main()12abc#"))
 # syntax_analyser("", 'c')
